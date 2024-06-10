@@ -10,12 +10,10 @@ location: "Atlanta, GA"
 
 In Summer of 2023, I served as a Graduate Teaching Assistant for the class CS7650: Natural Language Processsing under Dr. Mark Riedl. My duties included but were not limited to:
 
----
-*Helping students with course material and debugging coding assignments.
+* Helping students with course material and debugging coding assignments.
 
-*Designing Exam Questions.
+* Designing Exam Questions.
 
-*Answering student questions on a class forum.
+* Answering student questions on a class forum.
 
-*Assisting in assignment design and quality control.
----
+* Assisting in assignment design and quality control.
