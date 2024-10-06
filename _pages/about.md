@@ -1,4 +1,11 @@
-### Me
+---
+permalink: /
+title: "Me"
+author_profile: true
+redirect_from: 
+  - /about/
+  - /about.html
+---
 
 I'm a 1st year PhD Student at UC San Diego, advised by Dr. Prithviraj Ammanabrolu in the PEARLS Lab, united in our love for boba tea and our interest in embodied RL agents and interactive, human-aligned AI systems. 
 
