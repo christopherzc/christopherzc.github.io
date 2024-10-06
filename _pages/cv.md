@@ -13,8 +13,8 @@ redirect_from:
 
 I've served as a reviewer for the following conferences:
 
-ICLR 2024
-NeurIPS 2024
-ACL 2024 (Wordplay)
-IEEE Transactions on Games
-AIIDE 2024
+- ICLR 2024
+- NeurIPS 2024
+- ACL 2024 (Wordplay)
+- IEEE Transactions on Games
+- AIIDE 2024
