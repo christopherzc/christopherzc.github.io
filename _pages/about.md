@@ -17,7 +17,7 @@ Prior to this, I did my Master's at the Georgia Institute of Technology under th
 
 # Research Highlights:
 
-I'm the Research Lead/Technical Co-lead/CEO/whatever for Socratic Mind, a tool for conducting scalable oral assessments with AI. Our work was chosen in the [2024 Tools Competition](https://tools-competition.org/). Try a demo [here](https://socraticmind.com).
+I'm the Research Lead/Technical Co-lead/CEO/whatever for Socratic Mind, a tool for conducting scalable oral assessments with AI. Our work was chosen in the [2024 Tools Competition](https://tools-competition.org/23-24-accelerating-and-assessing-learning-winners/#:~:text=students%20with%20disabilities.-,Socratic%20Mind,-%7C%20Socratic%20Mind%20Inc). Try a demo [here](https://socraticmind.com).
 
 If you are interested in getting involved, either in building Socratic Mind or deploying it in your classroom, please email BOTH chris@socraticmind.com and ray@socraticmind.com
 
