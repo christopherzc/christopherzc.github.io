@@ -11,6 +11,8 @@ author_profile: true
 
 {% include base_path %}
 
+---
+
 # [Leveraging Past Assignments to Determine If Students Are Using ChatGPT for Their Essays](https://dl.acm.org/doi/pdf/10.1145/3657604.3664707)
 
 Yuhui Zhao, Chunhao Zao, Rohit Sridhar, **Christopher Cui**, Thad Starner
