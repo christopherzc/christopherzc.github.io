@@ -11,15 +11,13 @@ author_profile: true
 
 {% include base_path %}
 
----
----
-title: "Neural Story Planning"
-collection: publications
-permalink: /publication/2023-Neural-Story-Planning
-excerpt: "We present a method for story plot generation that combines causal planning with neural language models. By using commonsense knowledge to recursively expand story plots in a backward chaining fashion, our system improves narrative coherence. Automatic evaluations show that this approach generates more coherent plotlines than several strong baselines."
-date: 2023-02-13
-venue: "The AAAI-23 Workshop on Creative AI Across Modalities"
-paperurl: "https://arxiv.org/pdf/2212.08718"
----
+# [Neural Story Planning](/publication/2023-Neural-Story-Planning)
+
+We present a method for story plot generation that combines causal planning with neural language models. By using commonsense knowledge to recursively expand story plots in a backward chaining fashion, our system improves narrative coherence. Automatic evaluations show that this approach generates more coherent plotlines than several strong baselines.
+
+**Published in**: The AAAI-23 Workshop on Creative AI Across Modalities  
+**Date**: February 13, 2023  
+[Read the paper](https://arxiv.org/pdf/2212.08718)
+
 
 
