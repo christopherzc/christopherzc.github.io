@@ -15,7 +15,7 @@ In otherwords, I want AI to do my laundry and help me write. Not do the writing 
 
 Prior to this, I did my Master's at the Georgia Institute of Technology under the guidance of Dr. Thad Starner and Dr. Mark Riedl. While I was not fortunate enough to have the bandwidth to do research with him, I also served as the Head Graduate Teaching Assistant for Dr. Thomas Ploetz, who in turn served as an amazing mentor as well.
 
-# Research Highlights:
+## Research Highlights:
 
 I'm the [Research Lead/Technical Co-lead/CEO/whatever](https://christopherzc.github.io/cv/) for Socratic Mind, a tool for conducting scalable oral assessments with AI. Our work was chosen in the [2024 Tools Competition](https://tools-competition.org/23-24-accelerating-and-assessing-learning-winners/#:~:text=students%20with%20disabilities.-,Socratic%20Mind,-%7C%20Socratic%20Mind%20Inc). Try a demo [here](https://socraticmind.com).
 
