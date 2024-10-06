@@ -11,7 +11,7 @@ I'm a 1st year PhD Student at UC San Diego, advised by Dr. Prithviraj Ammanabrol
 
 In general, I am interested in all things Natural Language Processing (NLP), Reinforcement Learning (RL) and any systems that collaborate with people to improve the human experience as a whole. I see the future of AI as one where people work alongside intelligent systems rather than one where we are replaced by them.
 
-In otherwords, I want AI to do my laundry and help me write, not do the writing for me while I do my laundry.
+In otherwords, I want AI to do my laundry and help me write. Not do the writing for me while I do my laundry.
 
 Prior to this, I did my Master's at the Georgia Institute of Technology under the guidance of Dr. Thad Starner and Dr. Mark Riedl. While I was not fortunate enough to have the bandwidth to do research with him, I also served as the Head Graduate Teaching Assistant for Dr. Thomas Ploetz, who in turn served as an amazing mentor as well.
 
