@@ -9,7 +9,7 @@ redirect_from:
 
 {% include base_path %}
 
-(Last updated: 10/5/2024) [My cv can be found here](/christopherzc.github.io/_pages/Resume.pdf)
+(Last updated: 10/5/2024) [My cv can be found here](https://github.com/christopherzc/christopherzc.github.io/blob/master/_pages/Resume.pdf)
 
 I've served as a reviewer for the following conferences:
 
