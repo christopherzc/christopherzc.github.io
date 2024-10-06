@@ -11,13 +11,79 @@ author_profile: true
 
 {% include base_path %}
 
-# [Neural Story Planning](/publication/2023-Neural-Story-Planning)
+# [Leveraging Past Assignments to Determine If Students Are Using ChatGPT for Their Essays](https://dl.acm.org/doi/pdf/10.1145/3657604.3664707)
 
-We present a method for story plot generation that combines causal planning with neural language models. By using commonsense knowledge to recursively expand story plots in a backward chaining fashion, our system improves narrative coherence. Automatic evaluations show that this approach generates more coherent plotlines than several strong baselines.
+Yuhui Zhao, Chunhao Zao, Rohit Sridhar, Christopher Cui, Thad Starner
 
-**Published in**: The AAAI-23 Workshop on Creative AI Across Modalities  
-**Date**: February 13, 2023  
-[Read the paper](https://arxiv.org/pdf/2212.08718)
+**Published in**: Proceedings of the Tenth ACM Conference on Learning@ Scale 2024
+
+---
+
+# [Examinator v4.0: Cheating Detection in Online Take-Home Exams](https://dl.acm.org/doi/pdf/10.1145/3657604.3664659)
+
+Christopher Cui*, Jui-Tse Hung*, Vaibhav Malhotra, Hardik Goel, Raghav Apoorv, Thad Starner  
+*shared first author*
+
+**Published in**: Proceedings of the Tenth ACM Conference on Learning@ Scale 2024
+
+---
+
+# [Socratic Mind: Scalable Oral Assessment Powered By AI](https://dl.acm.org/doi/pdf/10.1145/3657604.3664661)
+
+Jui-Tse Hung, Christopher Cui, Diana M. Popescu, Saurabh Chatterjee, Thad Starner
+
+**Published in**: Proceedings of the Tenth ACM Conference on Learning@ Scale 2024
+
+---
+
+# [Answer Watermarking: Using Answer Generation Assistance Tools to Find Evidence of Cheating](https://dl.acm.org/doi/pdf/10.1145/3657604.3664712)
+
+Christopher Cui*, Jui-Tse Hung*, Pranav Sharma, Saurabh Chatterjee, Thad Starner  
+*shared first author*
+
+**Published in**: Proceedings of the Tenth ACM Conference on Learning@ Scale 2024
+
+---
+
+# [A Mixture-of-Experts Approach to Few-Shot Task Transfer in Open-Ended Text Worlds](https://arxiv.org/pdf/2405.06059)
+
+Christopher Cui, Xiangyu Peng, Mark Riedl
+
+**Pre-print**
+
+---
+
+# [Thespian: Multi-Character Text Role-Playing Game Agents](https://arxiv.org/abs/2308.01872)
+
+Christopher Cui, Xiangyu Peng, Mark O. Riedl
+
+**Published in**: Proceedings of the AIIDE Workshop on Experimental AI in Games (EXAG) 2023
+
+---
+
+# [Story Shaping: Teaching Agents Human-like Behavior with Stories](https://ojs.aaai.org/index.php/AIIDE/article/view/27528)
+
+Xiangyu Peng*, Christopher Cui*, Wei Zhou, Renee Jia, Mark O. Riedl  
+*shared first author*
+
+**Published in**: Proceedings of the 19th AAAI Conference on Artificial Intelligence in Interactive and Digital Entertainment (AIIDE) 2023
+
+---
+
+# [Examinator v3.0: Cheating Detection in Online Take-Home Exams](https://dl.acm.org/doi/pdf/10.1145/3573051.3596196)
+
+Jui-Tse Hung, Christopher Cui, Varun Agarwal, Saurabh Chatterjee, Raghav Apoorv, Rocko Graziano, Thad Starner
+
+**Published in**: Proceedings of the Tenth ACM Conference on Learning@ Scale 2023
+
+---
+
+# [Neural Story Planning](https://openreview.net/forum?id=cLBEKlu5WZK)
+
+Anbang Ye, Christopher Cui, Taiwei Shi, Mark O. Riedl
+
+**Published in**: Proceedings of the AAAI Workshop on Creative AI Across Modalities 2023
+
 
 
 
