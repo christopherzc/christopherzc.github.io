@@ -28,7 +28,7 @@ TLDR: Traditional ML methods can differientiate between human and LLM generated 
 **Christopher Cui***, Jui-Tse Hung*, Vaibhav Malhotra, Hardik Goel, Raghav Apoorv, Thad Starner  
 *equal contribution*
 
-TLDR: Using answer timestamps and decision trees to catch cheaters.Extension of Examintor v3
+TLDR: Using answer timestamps and decision trees to catch cheaters. Extension of Examintor v3
 
 **Published in**: Proceedings of the Tenth ACM Conference on Learning@ Scale 2024
 
