@@ -13,7 +13,7 @@ In general, I am interested in all things Natural Language Processing (NLP), Rei
 
 In otherwords, I want AI to do my laundry and help me write. Not do the writing for me while I do my laundry.
 
-Prior to this, I did my Master's at the Georgia Institute of Technology under the guidance of Dr. Thad Starner and Dr. Mark Riedl. While I was not fortunate enough to have the bandwidth to do research with him, I also served as the Head Graduate Teaching Assistant for Dr. Thomas Ploetz, who in turn served as an amazing mentor as well.
+Prior to this, I did my Master's at the Georgia Institute of Technology under the guidance of Dr. Thad Starner and Dr. Mark Riedl. While I was not fortunate enough to have the bandwidth to do research with him, I also served as the Head Graduate Teaching Assistant for Dr. Thomas Ploetz, who was an amazing mentor in turn as well.
 
 ## Research Highlights:
 
