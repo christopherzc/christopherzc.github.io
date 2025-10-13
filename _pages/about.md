@@ -18,7 +18,8 @@ Prior to this, I did my Master's at the Georgia Institute of Technology under th
 ## Research Highlights:
 Are you better than an LLM at Text-based Adventure Games?
 Find out [here](https://microsoft.github.io/tale-suite/).
-(Shameless research plug, but if you want to try out Zork1, check out the TALES page and click on the 'Environments' tab!
+
+(Shameless research plug, but if you want to try out Zork1, check out the TALES page and click on the 'Environments' tab!)
 
 I'm the Research Lead for Socratic Mind, a tool for conducting scalable oral assessments with AI. Our work was chosen in the [2024 Tools Competition](https://tools-competition.org/23-24-accelerating-and-assessing-learning-winners/#:~:text=students%20with%20disabilities.-,Socratic%20Mind,-%7C%20Socratic%20Mind%20Inc). Try a demo [here](https://socraticmind.com).
 
