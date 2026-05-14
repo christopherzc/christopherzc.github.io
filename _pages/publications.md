@@ -13,6 +13,26 @@ author_profile: true
 
 ---
 
+# [Behavior Cue Reasoning: Monitorable Reasoning Improves Efficiency and Safety through Oversight](https://arxiv.org/abs/2605.07021)
+
+**Christopher Z. Cui**, Taylor W. Killian, Prithviraj Ammanabrolu
+
+TLDR: We train LLMs to anchor atomic reasoning behaviors (e.g. *continue*, *stop*, *answer*) to special token sequences — "behavior cues" — making chain-of-thought reasoning monitorable and externally controllable. Cuts wasted reasoning tokens by up to 50% under an efficiency objective; more than doubles success rate under a safety-constrained objective by recovering safe actions from otherwise-unsafe traces 80% of the time. Evaluated on Qwen3-8B and GLM-Z1-9B across AIME, TextWorld, and HazardWorld.
+
+**Pre-print**
+
+---
+
+# [TALES: Text Adventure Learning Environment Suite](https://microsoft.github.io/tale-suite/)
+
+**Christopher Z. Cui**, Xingdi Yuan, Ziang Xiao, Prithviraj Ammanabrolu, Marc-Alexandre Côté
+
+TLDR: A progressive stress test of LLMs' baseline agentic capabilities — 122 tasks, 49 models benchmarked. Want to see if you can beat an LLM at Zork1? Try it on the [TALES page](https://microsoft.github.io/tale-suite/) (Environments tab).
+
+**Oral Presentation, REALM 2025 (non-archival)**
+
+---
+
 # [Leveraging Past Assignments to Determine If Students Are Using ChatGPT for Their Essays](https://dl.acm.org/doi/pdf/10.1145/3657604.3664707)
 
 Yuhui Zhao, Chunhao Zao, Rohit Sridhar, **Christopher Cui**, Thad Starner

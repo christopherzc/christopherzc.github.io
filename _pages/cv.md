@@ -9,12 +9,15 @@ redirect_from:
 
 {% include base_path %}
 
-(Last updated: 10/8/2024) [My cv can be found here](https://github.com/christopherzc/christopherzc.github.io/blob/master/_pages/Resume.pdf)
+(Last updated: 5/14/2026) [My CV can be found here](https://github.com/christopherzc/christopherzc.github.io/blob/master/_pages/Resume.pdf)
 
-I've served as a reviewer for the following conferences:
+## Service & Reviewing
 
-- ICLR 2024 (In Progress)
-- NeurIPS 2024
-- ACL 2024 ([Wordplay](https://wordplay-workshop.github.io/modern/))
-- IEEE Transactions on Games
-- AIIDE 2024
+- **Gold-tier Reviewer (top 25%)**, ICML 2026
+- Reviewer, ICLR 2026
+- Reviewer, NeurIPS 2025
+- Reviewer, NeurIPS 2024
+- Reviewer, ICLR 2024
+- Reviewer, ACL 2024 ([Wordplay](https://wordplay-workshop.github.io/modern/))
+- Reviewer, AIIDE 2024
+- Reviewer, IEEE Transactions on Games
