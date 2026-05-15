@@ -8,16 +8,33 @@ export interface Props {
 
 const { title, description } = Astro.props;
 ---
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} bodyClass="adventure">
+  <script is:inline>
+    // Apply theme before paint to avoid a parchment-flash.
+    (function () {
+      try {
+        var t = localStorage.getItem("adventure-theme");
+        if (t !== "dark" && t !== "light") t = "light";
+        document.documentElement.setAttribute("data-adventure-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-adventure-theme", "light");
+      }
+    })();
+  </script>
+
   <main class="page">
     <header class="site-header">
-      <a class="brand" href="/adventure/">> christopher_z_cui</a>
+      <a class="brand" href="/adventure/">&gt; christopher_z_cui</a>
       <nav>
         <a href="/adventure/">look</a>
         <a href="/adventure/publications/">publications</a>
         <a href="/adventure/talks/">talks</a>
         <a href="/adventure/teaching/">teaching</a>
         <a href="/adventure/cv/">cv</a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-light">[light]</span>
+          <span class="theme-dark">[dark]</span>
+        </button>
       </nav>
     </header>
 
@@ -30,4 +47,17 @@ const { title, description } = Astro.props;
       <a class="mode-toggle" href="/official/">switch to official mode &rarr;</a>
     </footer>
   </main>
+
+  <script is:inline>
+    (function () {
+      var btn = document.getElementById("theme-toggle");
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        var cur = document.documentElement.getAttribute("data-adventure-theme") || "light";
+        var next = cur === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-adventure-theme", next);
+        try { localStorage.setItem("adventure-theme", next); } catch (e) {}
+      });
+    })();
+  </script>
 </BaseLayout>
