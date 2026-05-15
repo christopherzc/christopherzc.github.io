@@ -1,0 +1,33 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <main class="page">
+    <header class="site-header">
+      <a class="brand" href="/adventure/">> christopher_z_cui</a>
+      <nav>
+        <a href="/adventure/">look</a>
+        <a href="/adventure/publications/">publications</a>
+        <a href="/adventure/talks/">talks</a>
+        <a href="/adventure/teaching/">teaching</a>
+        <a href="/adventure/cv/">cv</a>
+      </nav>
+    </header>
+
+    <div class="terminal">
+      <slot />
+    </div>
+
+    <footer class="site-footer">
+      <span>alignment status: monitorable &nbsp;·&nbsp; trace cleared</span>
+      <a class="mode-toggle" href="/official/">switch to official mode &rarr;</a>
+    </footer>
+  </main>
+</BaseLayout>

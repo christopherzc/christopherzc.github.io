@@ -1,0 +1,37 @@
+---
+import OfficialLayout from "../../../layouts/OfficialLayout.astro";
+import { getCollection } from "astro:content";
+
+const all = await getCollection("talks");
+const talks = all.sort((a, b) => +b.data.date - +a.data.date);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long" });
+---
+<OfficialLayout
+  title="Talks"
+  section="talks"
+  description="Talks and presentations by Christopher Z. Cui."
+>
+  <article class="prose">
+    <h1>Talks</h1>
+
+    <ul class="entry-list">
+      {talks.map(async (t) => {
+        const { Content } = await t.render();
+        return (
+          <li>
+            <div class="entry-title">{t.data.title}</div>
+            <div class="entry-meta">
+              {fmt(t.data.date)} &middot; {t.data.venue}
+              {t.data.location && <> &middot; {t.data.location}</>}
+            </div>
+            <div class="entry-excerpt">
+              <Content />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </article>
+</OfficialLayout>

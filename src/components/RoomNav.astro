@@ -1,0 +1,24 @@
+---
+export interface Props {
+  exits?: { label: string; href: string }[];
+  showHome?: boolean;
+}
+const { exits = [], showHome = true } = Astro.props;
+
+const defaultExits = [
+  { label: "look (back to the office)", href: "/adventure/" },
+  { label: "about — the placard", href: "/adventure/about/" },
+  { label: "publications — the preprint stack", href: "/adventure/publications/" },
+  { label: "talks — the slide deck", href: "/adventure/talks/" },
+  { label: "teaching — the seminar room", href: "/adventure/teaching/" },
+  { label: "cv — the cabinet of dossiers", href: "/adventure/cv/" },
+];
+
+const merged = exits.length ? exits : defaultExits;
+---
+<div class="exits">
+  <div class="exits-label">Obvious exits</div>
+  {merged.map((e) => (
+    <a class="exit" href={e.href}>{e.label}</a>
+  ))}
+</div>

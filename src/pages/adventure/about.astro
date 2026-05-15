@@ -1,0 +1,36 @@
+---
+import AdventureLayout from "../../layouts/AdventureLayout.astro";
+import RoomNav from "../../components/RoomNav.astro";
+---
+<AdventureLayout title="About — Adventure" description="Read the placard.">
+  <p class="room-title">The Placard</p>
+
+  <div class="desc">{`You step closer to the corkboard and pick up the placard. It reads:
+
+  CHRISTOPHER Z. CUI
+  3rd-year PhD student, UC San Diego, PEARLS Lab.
+  Advised by Dr. Prithviraj Ammanabrolu.
+
+  Interests: LLM agents, reinforcement learning, monitorable reasoning,
+  text environments, anything that helps AI systems collaborate with
+  people instead of around them.
+
+  This summer (Jun–Aug 2026): intern at Microsoft Research Montréal,
+  working with Marc-Alexandre Côté and Xingdi "Eric" Yuan on agents
+  in situated text environments.
+
+  Before UCSD: M.S. at Georgia Tech (Drs. Thad Starner & Mark Riedl).
+  Also served as Head Graduate TA for Dr. Thomas Ploetz — our research
+  interests didn't end up aligning, but he was a mentor and friend who
+  played a huge role in why I chose to pursue a PhD in the first place.
+
+  Most of my current work is about reasoning that you can watch from
+  the outside: making chain-of-thought monitorable and controllable,
+  training agents that can recover from their own bad reasoning, and
+  benchmarking what current LLMs can and can't do as agents in text
+  environments.
+
+  Boba preference: 50% sugar, less ice, taro pearls if available.`}</div>
+
+  <RoomNav />
+</AdventureLayout>

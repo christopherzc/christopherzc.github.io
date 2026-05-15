@@ -1,0 +1,130 @@
+---
+import AdventureLayout from "../../layouts/AdventureLayout.astro";
+---
+<AdventureLayout
+  title="Adventure"
+  description="Text-adventure version of Christopher Z. Cui's personal page."
+>
+  <p class="room-title">Research Office, UC San Diego</p>
+
+  <div class="desc">{`You are standing in a small research office at UC San Diego. A workstation
+hums in the corner; on the screen, a TextWorld run is happily wandering through
+a kitchen looking for a knife. Notes about *monitorable reasoning* and
+*behavior cues* are pinned to a corkboard. A small placard reads:
+
+  "Christopher Z. Cui — 3rd-year PhD, PEARLS Lab.
+   Advised by Dr. Prithviraj Ammanabrolu.
+   Interested in LLM agents and oversight-friendly reasoning."
+
+Several exits are visible.`}</div>
+
+  <div class="exits">
+    <div class="exits-label">Obvious exits</div>
+    <a class="exit" href="/adventure/about/">about &mdash; read the placard more carefully</a>
+    <a class="exit" href="/adventure/publications/">publications &mdash; the stack of preprints on the desk</a>
+    <a class="exit" href="/adventure/talks/">talks &mdash; the slide deck on the workstation</a>
+    <a class="exit" href="/adventure/teaching/">teaching &mdash; the door to the seminar room</a>
+    <a class="exit" href="/adventure/cv/">cv &mdash; the cabinet of dossiers</a>
+    <a class="exit" href="/adventure/easter-egg/">east &mdash; a small, mysterious door</a>
+  </div>
+
+  <div class="prompt">
+    <div>Type a command or click an exit.</div>
+    <form class="prompt-line" id="parser">
+      <span class="caret">&gt;</span>
+      <input type="text" id="cmd" autocomplete="off" autofocus
+             placeholder="look | examine notes | go publications | help" />
+    </form>
+    <div class="scrollback" id="scrollback"></div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const exits = {
+        about: "/adventure/about/",
+        publications: "/adventure/publications/",
+        pubs: "/adventure/publications/",
+        papers: "/adventure/publications/",
+        talks: "/adventure/talks/",
+        teaching: "/adventure/teaching/",
+        cv: "/adventure/cv/",
+        resume: "/adventure/cv/",
+        east: "/adventure/easter-egg/",
+        zork: "/adventure/easter-egg/",
+        official: "/official/",
+        home: "/",
+        title: "/",
+      };
+      const aliases = {
+        n: "north", s: "south", e: "east", w: "west", u: "up", d: "down",
+      };
+      const form = document.getElementById("parser");
+      const input = document.getElementById("cmd");
+      const sb = document.getElementById("scrollback");
+
+      function echo(line, cls) {
+        const div = document.createElement("div");
+        div.className = "entry" + (cls ? " " + cls : "");
+        div.textContent = line;
+        sb.appendChild(div);
+        sb.scrollTop = sb.scrollHeight;
+      }
+
+      function help() {
+        echo("commands:", "");
+        echo("  look                  — describe your surroundings", "");
+        echo("  go <exit> | <exit>    — travel (about, publications, talks, teaching, cv)", "");
+        echo("  examine <thing>       — look closer at something", "");
+        echo("  official              — abandon the adventure for the clean version", "");
+        echo("  help                  — this list", "");
+      }
+
+      function handle(raw) {
+        const cmd = raw.trim().toLowerCase();
+        if (!cmd) return;
+        echo("> " + cmd, "you");
+        const tokens = cmd.split(/\s+/).map((t) => aliases[t] || t);
+        const verb = tokens[0];
+        const arg = tokens.slice(1).join(" ");
+
+        if (verb === "help" || verb === "?") return help();
+        if (verb === "look" || verb === "l") {
+          echo("You are in the research office. (Scroll up for the full description.)");
+          return;
+        }
+        if (verb === "examine" || verb === "x" || verb === "read") {
+          if (arg.includes("note") || arg.includes("placard")) {
+            window.location.href = "/adventure/about/";
+            return;
+          }
+          if (arg.includes("preprint") || arg.includes("paper") || arg.includes("stack")) {
+            window.location.href = "/adventure/publications/";
+            return;
+          }
+          if (arg.includes("slide") || arg.includes("deck")) {
+            window.location.href = "/adventure/talks/";
+            return;
+          }
+          if (arg.includes("door")) {
+            window.location.href = "/adventure/easter-egg/";
+            return;
+          }
+          echo("You can't see anything special about that.");
+          return;
+        }
+        if (verb === "go" || verb === "enter" || verb === "open") {
+          if (exits[arg]) { window.location.href = exits[arg]; return; }
+        }
+        if (exits[verb]) { window.location.href = exits[verb]; return; }
+        echo("You don't know how to do that. (try `help`)");
+      }
+
+      form.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        const v = input.value;
+        input.value = "";
+        handle(v);
+      });
+    })();
+  </script>
+</AdventureLayout>

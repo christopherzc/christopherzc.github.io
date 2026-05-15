@@ -1,0 +1,34 @@
+---
+import OfficialLayout from "../../../layouts/OfficialLayout.astro";
+import { getCollection } from "astro:content";
+
+const all = await getCollection("teaching");
+const courses = all.sort((a, b) => +b.data.date - +a.data.date);
+---
+<OfficialLayout
+  title="Teaching"
+  section="teaching"
+  description="Teaching assignments and TA roles held by Christopher Z. Cui."
+>
+  <article class="prose">
+    <h1>Teaching</h1>
+
+    <ul class="entry-list">
+      {courses.map(async (c) => {
+        const { Content } = await c.render();
+        return (
+          <li>
+            <div class="entry-title">{c.data.course}</div>
+            <div class="entry-meta">
+              {c.data.term} &middot; {c.data.venue}
+              {c.data.instructor && <> &middot; {c.data.instructor}</>}
+            </div>
+            <div class="entry-excerpt">
+              <Content />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </article>
+</OfficialLayout>

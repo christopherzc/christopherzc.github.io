@@ -1,0 +1,38 @@
+---
+import AdventureLayout from "../../layouts/AdventureLayout.astro";
+import RoomNav from "../../components/RoomNav.astro";
+---
+<AdventureLayout title="CV — Adventure" description="The cabinet of dossiers.">
+  <p class="room-title">The Cabinet of Dossiers</p>
+
+  <div class="desc">{`You pull open a heavy wooden drawer. Inside is a single
+manila folder, clearly labeled. Behind it: a thin stack of
+"thank you for reviewing" emails, neatly chronological.`}</div>
+
+  <p style="font-family: var(--mono); margin-top: 1em;">
+    &gt; <a href="/files/Resume.pdf">take folder</a>
+    &nbsp;<span style="color: var(--ink-dim);">(downloads Resume.pdf — last updated 2026-05-14)</span>
+  </p>
+
+  <h2 style="font-family: var(--serif); margin-top: 2em;">Service &amp; Reviewing</h2>
+
+  <ul class="entry-list">
+    <li><strong>Gold-tier Reviewer (top 25%)</strong>, ICML 2026</li>
+    <li>Reviewer, ICLR 2026</li>
+    <li>Reviewer, NeurIPS 2025</li>
+    <li>Reviewer, NeurIPS 2024</li>
+    <li>Reviewer, ICLR 2024</li>
+    <li>Reviewer, ACL 2024 (<a href="https://wordplay-workshop.github.io/modern/">Wordplay</a>)</li>
+    <li>Reviewer, AIIDE 2024</li>
+    <li>Reviewer, IEEE Transactions on Games</li>
+  </ul>
+
+  <h2 style="font-family: var(--serif);">Contact</h2>
+  <p style="font-family: var(--mono); font-size: 0.95rem;">
+    email      &nbsp;<a href="mailto:czcui@ucsd.edu">czcui@ucsd.edu</a><br />
+    orcid      &nbsp;<a href="https://orcid.org/0000-0002-0116-634X">0000-0002-0116-634X</a><br />
+    scholar    &nbsp;<a href="https://scholar.google.com/citations?user=uGTn8fUAAAAJ&hl=en">profile</a>
+  </p>
+
+  <RoomNav />
+</AdventureLayout>

@@ -1,0 +1,36 @@
+---
+import AdventureLayout from "../../layouts/AdventureLayout.astro";
+import RoomNav from "../../components/RoomNav.astro";
+import { getCollection } from "astro:content";
+
+const courses = (await getCollection("teaching")).sort(
+  (a, b) => +b.data.date - +a.data.date,
+);
+---
+<AdventureLayout title="Teaching — Adventure" description="The seminar room.">
+  <p class="room-title">The Seminar Room</p>
+
+  <div class="desc">{`A whiteboard runs along one wall, marker-streaked from a decade
+of office hours. A stack of graded problem sets leans against a
+chair. Course rosters tile a corkboard.`}</div>
+
+  <ul class="entry-list" style="margin-top: 1.5em;">
+    {courses.map(async (c) => {
+      const { Content } = await c.render();
+      return (
+        <li>
+          <div class="entry-title">{c.data.course}</div>
+          <div class="entry-meta">
+            {c.data.term} · {c.data.venue}
+            {c.data.instructor && <> · {c.data.instructor}</>}
+          </div>
+          <div class="entry-excerpt">
+            <Content />
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+
+  <RoomNav />
+</AdventureLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout
+  title="Christopher Z. Cui"
+  description="Personal site of Christopher Z. Cui, PhD student at UC San Diego working on LLM agents and monitorable reasoning."
+>
+  <main class="title-page">
+    <div class="ornament">· · · · ·</div>
+    <h1>Christopher Z. Cui</h1>
+    <div class="subtitle">
+      a personal page in two parts &mdash; for the curious and the patient.
+    </div>
+    <div class="ornament">· · · · ·</div>
+
+    <p style="max-width: 32rem; margin-top: 2rem; font-family: var(--serif); color: var(--ink-soft); line-height: 1.7;">
+      You stand at the threshold of a small research office. The door on the left
+      bears a neat brass plate; the door on the right is propped open with what
+      looks suspiciously like a worn copy of <em>Zork I</em>. Both lead inside.
+    </p>
+
+    <div class="doors">
+      <a class="door" href="/official/">
+        <span class="label">left door &mdash; clean</span>
+        <span class="name"><span class="arrow">&rarr;</span> Official</span>
+      </a>
+      <a class="door" href="/adventure/">
+        <span class="label">right door &mdash; verbose</span>
+        <span class="name"><span class="arrow">&rarr;</span> Adventure</span>
+      </a>
+    </div>
+
+    <p class="colophon">
+      Both doors lead to the same person and the same research.
+      The official side reads like a CV; the adventure side reads like a
+      text adventure. Pick whichever fits your mood &mdash; you can switch
+      from the footer of any page.
+    </p>
+  </main>
+</BaseLayout>

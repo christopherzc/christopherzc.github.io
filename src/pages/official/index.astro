@@ -1,0 +1,90 @@
+---
+import OfficialLayout from "../../layouts/OfficialLayout.astro";
+import { getCollection } from "astro:content";
+
+const highlights = (await getCollection("publications", (e) => e.data.highlight))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+<OfficialLayout
+  title="About"
+  section="about"
+  description="Christopher Z. Cui — PhD student at UC San Diego working on monitorable reasoning, LLM agents, and text-adventure environments."
+>
+  <article class="prose">
+    <h1>About</h1>
+
+    <p>
+      I'm a 3rd-year PhD student at UC San Diego, advised by
+      <a href="https://prithvirajva.com/">Dr. Prithviraj Ammanabrolu</a> in the
+      <a href="https://pearls-lab.github.io/">PEARLS Lab</a>, united in our love
+      for boba tea and our interest in embodied RL agents and interactive,
+      human-aligned AI systems.
+    </p>
+
+    <p>
+      In general, I'm interested in all things Natural Language Processing,
+      Reinforcement Learning, and systems that collaborate with people to
+      improve the human experience as a whole.
+    </p>
+
+    <p>
+      Most of my current work centers on the reasoning capabilities of LLMs,
+      especially in multi-turn agentic settings, where the standard paradigm
+      of "burn tokens until something happens" can actually hurt performance.
+      I think about how to make reasoning <em>monitorable</em> and
+      <em>controllable</em> from the outside, how to train agents that can
+      recover from their own bad reasoning, and how to stress-test what current
+      LLMs can and can't do as agents in text environments.
+    </p>
+
+    <p>
+      This summer (June&ndash;August 2026), I'll be interning at
+      <strong>Microsoft Research Montréal</strong> with
+      <a href="https://www.microsoft.com/en-us/research/people/macote/">Marc-Alexandre Côté</a>
+      and
+      <a href="https://www.microsoft.com/en-us/research/people/xinyuan/">Xingdi "Eric" Yuan</a>,
+      continuing our collaboration on LLM agents and situated text environments.
+    </p>
+
+    <p>
+      Prior to UCSD, I did my Master's at the Georgia Institute of Technology
+      under the guidance of Dr. Thad Starner and Dr. Mark Riedl. I also had the
+      privilege of serving as a Head Graduate Teaching Assistant for Dr. Thomas
+      Ploetz &mdash; although our research interests didn't end up aligning, he
+      was a mentor and friend whose influence is a big part of why I chose to
+      pursue a PhD in the first place.
+    </p>
+
+    <h2>Research Highlights</h2>
+
+    {highlights.map((h) => (
+      <div class="highlight">
+        <div class="h-title">
+          <a href={h.data.paperurl} rel="noopener">{h.data.title}</a>
+        </div>
+        <div class="h-meta">{h.data.authors} &middot; {h.data.venue}</div>
+        <p set:html={h.data.excerpt} />
+      </div>
+    ))}
+
+    <div class="highlight">
+      <div class="h-title">
+        <a href="https://socraticmind.com">Socratic Mind</a> &mdash; Research Lead
+      </div>
+      <div class="h-meta">Tools Competition 2023&ndash;24 winner</div>
+      <p>
+        Using foundation models to conduct scalable, interactive oral
+        assessments. The tool has since garnered interest from 15+ professors
+        across 7 universities and served over 1,000 students. Try a demo at
+        <a href="https://socraticmind.com">socraticmind.com</a>.
+      </p>
+    </div>
+
+    <hr />
+
+    <p>
+      Check out the other
+      <a href="https://pearls-lab.github.io/people/">cool stuff my labmates are working on</a>!
+    </p>
+  </article>
+</OfficialLayout>

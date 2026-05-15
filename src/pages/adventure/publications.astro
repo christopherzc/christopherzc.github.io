@@ -1,0 +1,36 @@
+---
+import AdventureLayout from "../../layouts/AdventureLayout.astro";
+import RoomNav from "../../components/RoomNav.astro";
+import { getCollection } from "astro:content";
+
+const pubs = (await getCollection("publications")).sort(
+  (a, b) => +b.data.date - +a.data.date,
+);
+const fmt = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "short" });
+---
+<AdventureLayout title="Publications — Adventure" description="The stack of preprints.">
+  <p class="room-title">The Stack of Preprints</p>
+
+  <div class="desc">{`Sitting on the desk is a precarious tower of papers, each
+held together with a single binder clip. You riff through them in
+chronological order, newest first.`}</div>
+
+  <ul class="entry-list" style="margin-top: 1.5em;">
+    {pubs.map((p) => (
+      <li>
+        <div class="entry-title">
+          {p.data.paperurl
+            ? <a href={p.data.paperurl} rel="noopener">{p.data.title}</a>
+            : <span>{p.data.title}</span>}
+        </div>
+        <div class="entry-meta">{fmt(p.data.date)} · {p.data.venue}</div>
+        {p.data.authors && (
+          <div class="entry-meta" style="margin-top: -0.2em;">{p.data.authors}</div>
+        )}
+        <p class="entry-excerpt" set:html={p.data.excerpt} />
+      </li>
+    ))}
+  </ul>
+
+  <RoomNav />
+</AdventureLayout>
