@@ -303,6 +303,46 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
   font-style: italic;
 }
 
+.title-page .resume-shortcut {
+  display: inline-flex;
+  align-items: baseline;
+  margin-top: 1.6rem;
+  padding: 0.55rem 1.1rem;
+  border: 1px dashed var(--rust);
+  border-radius: 2px;
+  background: var(--bg-soft);
+  font-family: var(--mono);
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.title-page .resume-shortcut:hover {
+  background: var(--rust);
+  border-style: solid;
+  color: var(--bg);
+}
+
+.title-page .resume-shortcut .resume-label {
+  color: var(--ink-dim);
+  font-style: italic;
+}
+
+.title-page .resume-shortcut:hover .resume-label {
+  color: var(--bg);
+}
+
+.title-page .resume-shortcut .resume-cta {
+  color: var(--rust);
+  font-weight: 500;
+}
+
+.title-page .resume-shortcut:hover .resume-cta {
+  color: var(--bg);
+}
+
 .title-page .colophon {
   margin-top: 3.5rem;
   font-size: 0.78rem;
