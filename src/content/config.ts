@@ -46,6 +46,8 @@ const blog = defineCollection({
     description: z.string(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // Folder (under public/) with manifest.json for the trajectory viewer.
+    trajectories: z.string().optional(),
   }),
 });
 

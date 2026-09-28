@@ -1,0 +1,284 @@
+---
+// Step-by-step viewer for agent trajectories built by
+// scripts/build_trajectory_data.py. `src` is the folder holding manifest.json.
+export interface Props {
+  src: string;
+}
+
+const { src } = Astro.props;
+---
+<section class="traj" data-src={src} aria-label="Trajectory viewer">
+  <div class="traj-bar">
+    <label>run <select class="traj-seed"></select></label>
+    <label>step <input class="traj-jump" type="number" min="1" inputmode="numeric" /></label>
+    <label class="traj-check"><input class="traj-only" type="checkbox" /> only steps with reasoning</label>
+  </div>
+  <div class="traj-meta"></div>
+  <svg class="traj-chart" preserveAspectRatio="none" role="img" aria-label="Score over steps; click to jump"></svg>
+  <p class="traj-legend">
+    <mark class="future">highlighted</mark> reasoning names something the game
+    had not shown yet &mdash; hover for when it first appears.
+  </p>
+  <ol class="traj-steps"><li class="traj-loading">loading trajectories&hellip;</li></ol>
+</section>
+
+<script>
+  type Seg = [string, number, number[]];
+  type Step = { s: number; sc: number; a: string; f: string; t?: Seg[] };
+  type Seed = {
+    seed: string; steps: number; highscore: number; max_score: number;
+    summaries: number; future_summaries: number; future_refs: number;
+  };
+  type Run = Seed & { start: string; refs: [string, number][]; steps: Step[] };
+
+  const esc = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+  for (const root of document.querySelectorAll<HTMLElement>(".traj")) {
+    const base = root.dataset.src!.replace(/\/?$/, "/");
+    const seedSel = root.querySelector(".traj-seed") as HTMLSelectElement;
+    const jump = root.querySelector(".traj-jump") as HTMLInputElement;
+    const only = root.querySelector(".traj-only") as HTMLInputElement;
+    const meta = root.querySelector(".traj-meta") as HTMLElement;
+    const chart = root.querySelector(".traj-chart") as SVGSVGElement;
+    const list = root.querySelector(".traj-steps") as HTMLOListElement;
+    const cache = new Map<string, Run>();
+    let run: Run | null = null;
+
+    const renderThinking = (t: Seg[], refs: Run["refs"]) =>
+      t.map(([text, bold, ids]) => {
+        let h = esc(text);
+        if (bold) h = `<strong>${h}</strong>`;
+        if (ids.length) {
+          const tip = ids.map((i) => `${refs[i][0]} — first shown at step ${refs[i][1]}`).join("\n");
+          h = `<mark class="future" title="${esc(tip)}">${h}</mark>`;
+        }
+        return h;
+      }).join("");
+
+    const renderChart = (r: Run) => {
+      const W = 1000, H = 60, n = r.steps.length;
+      const pts = r.steps.map((s, i) =>
+        `${((i + 1) / n) * W},${H - (s.sc / r.max_score) * (H - 4) - 2}`).join(" ");
+      const ticks = r.steps.filter((s) => s.t).map((s) =>
+        `<line class="tick${s.t!.some((g) => g[2].length) ? " future" : ""}" x1="${(s.s / n) * W}" x2="${(s.s / n) * W}" y1="${H - 6}" y2="${H}" />`).join("");
+      chart.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      chart.innerHTML = `<polyline points="0,${H - 2} ${pts}" />${ticks}`;
+    };
+
+    const render = (r: Run) => {
+      run = r;
+      jump.max = String(r.steps.length);
+      meta.textContent =
+        `${r.highscore}/${r.max_score} points in ${r.steps.length} steps · ` +
+        `${r.summaries} visible reasoning summaries, ${r.future_summaries} with future references`;
+      renderChart(r);
+      let prev = 0;
+      const items = [`<li class="traj-step start" data-step="0"><div class="ts-head">start</div><pre class="ts-feedback">${esc(r.start)}</pre></li>`];
+      for (const s of r.steps) {
+        const d = s.sc - prev;
+        prev = s.sc;
+        const delta = d ? `<span class="ts-delta ${d > 0 ? "up" : "down"}">${d > 0 ? "+" : ""}${d}</span>` : "";
+        items.push(
+          `<li class="traj-step${s.t ? " has-t" : ""}" id="${root.id || "traj"}-${r.seed}-${s.s}" data-step="${s.s}">` +
+          `<div class="ts-head"><span>step ${s.s}</span><span>score ${s.sc}${delta}</span></div>` +
+          (s.t ? `<div class="ts-think"><span class="ts-label">reasoning summary</span>${renderThinking(s.t, r.refs)}</div>` : "") +
+          `<div class="ts-action">&gt; ${esc(s.a)}</div>` +
+          `<pre class="ts-feedback">${esc(s.f)}</pre></li>`);
+      }
+      list.innerHTML = items.join("");
+    };
+
+    const load = async (seed: string) => {
+      if (!cache.has(seed)) {
+        list.innerHTML = `<li class="traj-loading">loading&hellip;</li>`;
+        cache.set(seed, await (await fetch(`${base}seed-${seed}.json`)).json());
+      }
+      seedSel.value = seed;
+      render(cache.get(seed)!);
+    };
+
+    const goTo = (step: number) => {
+      if (!run) return;
+      step = Math.max(1, Math.min(run.steps.length, Math.round(step)));
+      const el = list.querySelector<HTMLElement>(`[data-step="${step}"]`);
+      if (!el) return;
+      if (only.checked && !el.classList.contains("has-t")) {
+        only.checked = false;
+        root.classList.remove("only-t");
+      }
+      jump.value = String(step);
+      el.scrollIntoView({ block: "start", behavior: "smooth" });
+      el.classList.remove("flash");
+      void el.offsetWidth;
+      el.classList.add("flash");
+    };
+
+    seedSel.addEventListener("change", () => load(seedSel.value));
+    jump.addEventListener("change", () => goTo(+jump.value));
+    only.addEventListener("change", () => root.classList.toggle("only-t", only.checked));
+    chart.addEventListener("click", (e) => {
+      if (!run) return;
+      const box = chart.getBoundingClientRect();
+      goTo(((e.clientX - box.left) / box.width) * run.steps.length);
+    });
+
+    // Other scripts (e.g. links in a post) can ask the viewer to show a step.
+    root.addEventListener("traj:goto", async (e) => {
+      const { seed, step } = (e as CustomEvent).detail;
+      if (seed && seed !== run?.seed) await load(seed);
+      requestAnimationFrame(() => goTo(step));
+    });
+
+    (async () => {
+      const m = await (await fetch(`${base}manifest.json`)).json();
+      seedSel.innerHTML = m.seeds.map((s: Seed, i: number) =>
+        `<option value="${s.seed}">#${i + 1} · seed ${s.seed} · ${s.highscore}/${s.max_score}</option>`).join("");
+      if (!run) await load(m.seeds[0].seed);
+      root.dispatchEvent(new Event("traj:ready"));
+    })();
+  }
+</script>
+
+<style is:global>
+  .traj {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .traj-bar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
+    align-items: center;
+    padding: 0.6rem 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-dim);
+  }
+
+  .traj-bar select,
+  .traj-bar input[type="number"] {
+    font: inherit;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 1px solid var(--rule);
+    padding: 0.15rem 0.3rem;
+  }
+
+  .traj-bar input[type="number"] { width: 5em; }
+  .traj-check { cursor: pointer; }
+
+  .traj-meta {
+    margin: 0.7rem 0 0.4rem;
+    color: var(--ink-soft);
+  }
+
+  .traj-chart {
+    display: block;
+    width: 100%;
+    height: 60px;
+    cursor: crosshair;
+    background: var(--bg-soft);
+    border: 1px solid var(--rule-soft);
+  }
+
+  .traj-chart polyline {
+    fill: none;
+    stroke: var(--olive);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .traj-chart .tick {
+    stroke: var(--ink-dim);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .traj-chart .tick.future { stroke: var(--rust); }
+
+  .traj-legend {
+    margin: 0.5rem 0 0.8rem;
+    font-size: 0.78rem;
+    color: var(--ink-dim);
+  }
+
+  .traj mark.future {
+    background: rgba(160, 74, 42, 0.14);
+    color: inherit;
+    border-bottom: 1px solid var(--rust);
+    cursor: help;
+  }
+
+  .traj-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .traj-step {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px dashed var(--rule-soft);
+    scroll-margin-top: 6rem;
+  }
+
+  .traj.only-t .traj-step:not(.has-t):not(.start) { display: none; }
+
+  .traj-step.flash { animation: traj-flash 1.6s ease-out; }
+
+  @keyframes traj-flash {
+    from { background: rgba(107, 122, 58, 0.22); }
+    to { background: transparent; }
+  }
+
+  .ts-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .ts-delta { margin-left: 0.4em; }
+  .ts-delta.up { color: var(--olive); font-weight: 500; }
+  .ts-delta.down { color: var(--rust); }
+
+  .ts-think {
+    margin: 0.4rem 0;
+    padding: 0.2rem 0 0.2rem 0.8rem;
+    border-left: 2px solid var(--rule);
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+  }
+
+  .ts-label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-dim);
+  }
+
+  .ts-action {
+    margin-top: 0.3rem;
+    color: var(--rust);
+    font-weight: 500;
+  }
+
+  .ts-feedback {
+    margin: 0.2rem 0 0;
+    font-size: 0.82rem;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+
+  .traj-loading { padding: 1rem 0; color: var(--ink-dim); }
+</style>

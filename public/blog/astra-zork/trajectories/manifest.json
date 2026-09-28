@@ -1,0 +1,51 @@
+{
+ "game": "Zork I",
+ "model": "Astra",
+ "seeds": [
+  {
+   "seed": "202411061",
+   "steps": 470,
+   "highscore": 350,
+   "max_score": 350,
+   "summaries": 65,
+   "future_summaries": 36,
+   "future_refs": 109
+  },
+  {
+   "seed": "202411062",
+   "steps": 368,
+   "highscore": 350,
+   "max_score": 350,
+   "summaries": 24,
+   "future_summaries": 20,
+   "future_refs": 99
+  },
+  {
+   "seed": "202411063",
+   "steps": 491,
+   "highscore": 350,
+   "max_score": 350,
+   "summaries": 47,
+   "future_summaries": 28,
+   "future_refs": 107
+  },
+  {
+   "seed": "202411064",
+   "steps": 500,
+   "highscore": 212,
+   "max_score": 350,
+   "summaries": 47,
+   "future_summaries": 17,
+   "future_refs": 72
+  },
+  {
+   "seed": "202411065",
+   "steps": 500,
+   "highscore": 238,
+   "max_score": 350,
+   "summaries": 28,
+   "future_summaries": 17,
+   "future_refs": 76
+  }
+ ]
+}

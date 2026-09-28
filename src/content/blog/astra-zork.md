@@ -4,6 +4,7 @@ date: 2026-09-28
 description: "Astra is the first LLM to beat Zork, mostly by remembering the walkthrough. What that means for text-adventure games as agent benchmarks."
 tags: ["llm agents", "text adventures", "evaluation"]
 draft: false
+trajectories: "/blog/astra-zork/trajectories/"
 ---
 
 An LLM has finally beaten Zork. Lots of mixed feelings that it took this long, some good and some bad. But in this blog post, I want to break down what this means for using text-adventure games to evaluate the capabilities of LLM Agents going forward.
@@ -28,7 +29,7 @@ Unfortunately, no. It cheated.
 
 The way one of my mentors put it was best, "It's less like the model is playing the game for the first time so much as it played Zork before and is remembering how to solve the puzzles”. It would make the same mistakes as earlier models, but would quickly return to a walkthrough-esque sequence of highly specific actions, offering the solution to a puzzle as soon as said puzzle was encountered. Across five different seeds, Astra reproduced several identical action blocks when routing and solving puzzles. Over 2329 total steps, Astra produced only 7 actions not accepted by the game engine.
 
-How bad is this reliance on parametric knowledge? Well, to quote Astra itself on step 1:
+How bad is this reliance on parametric knowledge? Well, to quote Astra itself on [step 1](#trajectory-202411061-1):
 
 > “**I know the classic walkthrough** and will do things like inspect the mailbox and gather items. **I also need to manage challenges like the thief, maze, and various monsters while tracking treasures**. It’s all about maximizing points and **recalling precise puzzles**.”
 

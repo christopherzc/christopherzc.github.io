@@ -740,6 +740,99 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
   stroke-linecap: round;
 }
 
+/* Post / split / trajectory views (posts with a trajectory viewer) */
+.view-switch {
+  display: inline-flex;
+  margin: 0 0 1.4rem;
+  border: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.view-switch button {
+  padding: 0.3rem 0.8rem;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--rule);
+  font: inherit;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.view-switch button:first-child { border-left: none; }
+.view-switch button:hover { color: var(--rust); }
+
+.view-switch button[aria-pressed="true"] {
+  background: var(--bg-soft);
+  color: var(--rust);
+}
+
+/* While reading the post, keep the switch reachable. */
+html[data-reader-view="post"] .view-switch {
+  position: sticky;
+  top: 0.6rem;
+  z-index: 5;
+  background: var(--bg);
+}
+
+.reader-traj { display: none; }
+
+html[data-reader-view="trajectory"] .reader-post { display: none; }
+html[data-reader-view="trajectory"] .reader-traj { display: block; }
+html[data-reader-view="trajectory"] .page { max-width: 56rem; }
+
+html[data-reader-view="split"] .page {
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+
+html[data-reader-view="split"] .site-header { flex-shrink: 0; margin-bottom: 1rem; }
+html[data-reader-view="split"] .view-switch { align-self: flex-start; flex-shrink: 0; margin-bottom: 1rem; }
+html[data-reader-view="split"] .site-footer,
+html[data-reader-view="split"] .site-attribution { display: none; }
+
+html[data-reader-view="split"] .reader {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 2rem;
+}
+
+html[data-reader-view="split"] .reader-post,
+html[data-reader-view="split"] .reader-traj {
+  display: block;
+  position: relative;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 1rem;
+}
+
+html[data-reader-view="split"] .reader-post { max-width: none; }
+html[data-reader-view="split"] .reader-post > * { max-width: var(--measure); margin-left: auto; margin-right: auto; }
+html[data-reader-view="split"] .reader-post > h1:first-child { margin-top: 0; }
+
+/* Narrow screens: split stacks the post above the trajectory. */
+@media (max-width: 50rem) {
+  html[data-reader-view="split"] .reader {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+  html[data-reader-view="split"] .reader-traj {
+    border-top: 1px solid var(--rule);
+  }
+}
+
+.prose a.traj-link {
+  text-decoration-style: dotted;
+}
+
 /* "Research Highlight" block */
 .highlight {
   margin: 1.4em 0;

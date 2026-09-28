@@ -56,6 +56,20 @@ draft: false         # true hides it from the build
 ---
 ```
 
+### Trajectory viewer
+
+A post can show agent trajectories next to the text (post / split /
+trajectories views). Build the data from a TALES run directory:
+
+```bash
+python3 scripts/build_trajectory_data.py RUN_DIR public/blog/<post>/trajectories \
+  --edges RUN_DIR/diagnostics/reference-matrix-audit/reference_edges.csv
+```
+
+then add `trajectories: "/blog/<post>/trajectories/"` to the post's
+frontmatter. Link to a step from the post with
+`[step 1](#trajectory-<seed>-<step>)`.
+
 ## Deploy
 
 `.github/workflows/deploy.yml` builds on push to `master` and deploys via the

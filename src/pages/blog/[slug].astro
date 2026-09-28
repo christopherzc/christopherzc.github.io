@@ -1,5 +1,6 @@
 ---
 import BlogLayout from "../../layouts/BlogLayout.astro";
+import TrajectoryViewer from "../../components/TrajectoryViewer.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -9,21 +10,96 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+const { trajectories } = post.data;
 
 const fmt = (d: Date) =>
   d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 ---
 <BlogLayout title={post.data.title} description={post.data.description}>
-  <article class="prose">
-    <h1>{post.data.title}</h1>
-    <div class="entry-meta">
-      {fmt(post.data.date)}
-      {post.data.tags.length > 0 && <> &middot; {post.data.tags.join(", ")}</>}
-    </div>
+  {trajectories && (
+    <>
+      <script is:inline>
+        // Pick the view before paint so split/trajectory pages don't flash.
+        (function () {
+          var v = new URLSearchParams(location.search).get("view");
+          if (v !== "split" && v !== "trajectory") v = "post";
+          document.documentElement.setAttribute("data-reader-view", v);
+        })();
+      </script>
+      <div class="view-switch" role="group" aria-label="View">
+        <button type="button" data-view="post">post</button>
+        <button type="button" data-view="split">split</button>
+        <button type="button" data-view="trajectory">trajectories</button>
+      </div>
+    </>
+  )}
 
-    <Content />
+  <div class="reader">
+    <article class="prose reader-post">
+      <h1>{post.data.title}</h1>
+      <div class="entry-meta">
+        {fmt(post.data.date)}
+        {post.data.tags.length > 0 && <> &middot; {post.data.tags.join(", ")}</>}
+      </div>
 
-    <hr />
-    <p><a href="/blog/">&larr; all posts</a></p>
-  </article>
+      <Content />
+
+      <hr />
+      <p><a href="/blog/">&larr; all posts</a></p>
+    </article>
+
+    {trajectories && (
+      <div class="reader-traj">
+        <TrajectoryViewer src={trajectories} />
+      </div>
+    )}
+  </div>
 </BlogLayout>
+
+<script>
+  const html = document.documentElement;
+  const viewer = document.querySelector<HTMLElement>(".traj");
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".view-switch button");
+
+  const post = document.querySelector<HTMLElement>(".reader-post");
+
+  // The block of the post at the top of the screen, so switching views keeps
+  // the reader's place.
+  const topBlock = () => {
+    if (!post || getComputedStyle(post).display === "none") return null;
+    const edge = Math.max(post.getBoundingClientRect().top, 0);
+    return [...post.children].find((el) => el.getBoundingClientRect().bottom > edge + 1) ?? null;
+  };
+
+  const setView = (v: string) => {
+    const keep = topBlock();
+    html.setAttribute("data-reader-view", v);
+    keep?.scrollIntoView({ block: "start" });
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === v)));
+    const url = new URL(location.href);
+    if (v === "post") url.searchParams.delete("view");
+    else url.searchParams.set("view", v);
+    history.replaceState(null, "", url);
+  };
+
+  if (viewer) {
+    buttons.forEach((b) => b.addEventListener("click", () => setView(b.dataset.view!)));
+    setView(html.getAttribute("data-reader-view") || "post");
+
+    // Links in the post like [step 1](#trajectory-202411061-1) open that
+    // step in the viewer, switching to split view if only the post is showing.
+    const goto = (hash: string) => {
+      const m = hash.match(/^#trajectory-(\d+)-(\d+)$/);
+      if (!m) return false;
+      if (html.getAttribute("data-reader-view") === "post") setView("split");
+      viewer.dispatchEvent(new CustomEvent("traj:goto", { detail: { seed: m[1], step: +m[2] } }));
+      return true;
+    };
+    document.querySelectorAll<HTMLAnchorElement>('.reader-post a[href^="#trajectory-"]').forEach((a) => {
+      a.classList.add("traj-link");
+      a.addEventListener("click", (e) => { if (goto(a.getAttribute("href")!)) e.preventDefault(); });
+    });
+    if (location.hash) viewer.addEventListener("traj:ready", () => goto(location.hash), { once: true });
+    window.addEventListener("hashchange", () => goto(location.hash));
+  }
+</script>
