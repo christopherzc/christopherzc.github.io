@@ -1,6 +1,6 @@
 ---
 // Step-by-step viewer for agent trajectories built by
-// scripts/build_trajectory_data.py. `src` is the folder holding manifest.json.
+// scripts/build_trajectory_data.py. `src` is the folder holding index.json.
 export interface Props {
   src: string;
 }
@@ -9,6 +9,7 @@ const { src } = Astro.props;
 ---
 <section class="traj" data-src={src} aria-label="Trajectory viewer">
   <div class="traj-bar">
+    <label class="traj-game-label">game <select class="traj-game"></select></label>
     <label>run <select class="traj-seed"></select></label>
     <label>step <input class="traj-jump" type="number" min="1" inputmode="numeric" /></label>
     <label class="traj-check"><input class="traj-only" type="checkbox" /> only steps with reasoning</label>
@@ -29,6 +30,7 @@ const { src } = Astro.props;
     seed: string; steps: number; highscore: number; max_score: number;
     summaries: number; future_summaries: number; future_refs: number;
   };
+  type Manifest = { id: string; game: string; model: string; seeds: Seed[] };
   type Run = Seed & { start: string; refs: [string, number][]; steps: Step[] };
 
   const esc = (s: string) =>
@@ -36,13 +38,16 @@ const { src } = Astro.props;
 
   for (const root of document.querySelectorAll<HTMLElement>(".traj")) {
     const base = root.dataset.src!.replace(/\/?$/, "/");
+    const gameSel = root.querySelector(".traj-game") as HTMLSelectElement;
     const seedSel = root.querySelector(".traj-seed") as HTMLSelectElement;
     const jump = root.querySelector(".traj-jump") as HTMLInputElement;
     const only = root.querySelector(".traj-only") as HTMLInputElement;
     const meta = root.querySelector(".traj-meta") as HTMLElement;
     const chart = root.querySelector(".traj-chart") as SVGSVGElement;
     const list = root.querySelector(".traj-steps") as HTMLOListElement;
-    const cache = new Map<string, Run>();
+    const manifests = new Map<string, Manifest>();
+    const runs = new Map<string, Run>();
+    let game = "";
     let run: Run | null = null;
 
     const renderThinking = (t: Seg[], refs: Run["refs"]) =>
@@ -79,23 +84,37 @@ const { src } = Astro.props;
         const d = s.sc - prev;
         prev = s.sc;
         const delta = d ? `<span class="ts-delta ${d > 0 ? "up" : "down"}">${d > 0 ? "+" : ""}${d}</span>` : "";
+        const action = s.a.trim() ? esc(s.a) : `<span class="ts-enter">(enter)</span>`;
         items.push(
-          `<li class="traj-step${s.t ? " has-t" : ""}" id="${root.id || "traj"}-${r.seed}-${s.s}" data-step="${s.s}">` +
+          `<li class="traj-step${s.t ? " has-t" : ""}" data-step="${s.s}">` +
           `<div class="ts-head"><span>step ${s.s}</span><span>score ${s.sc}${delta}</span></div>` +
           (s.t ? `<div class="ts-think"><span class="ts-label">reasoning summary</span>${renderThinking(s.t, r.refs)}</div>` : "") +
-          `<div class="ts-action">&gt; ${esc(s.a)}</div>` +
+          `<div class="ts-action">&gt; ${action}</div>` +
           `<pre class="ts-feedback">${esc(s.f)}</pre></li>`);
       }
       list.innerHTML = items.join("");
     };
 
-    const load = async (seed: string) => {
-      if (!cache.has(seed)) {
+    const loadGame = async (id: string) => {
+      if (!manifests.has(id)) manifests.set(id, await (await fetch(`${base}${id}/manifest.json`)).json());
+      const m = manifests.get(id)!;
+      game = id;
+      gameSel.value = id;
+      seedSel.innerHTML = m.seeds.map((s, i) =>
+        `<option value="${s.seed}">#${i + 1} · seed ${s.seed} · ${s.highscore}/${s.max_score}</option>`).join("");
+      return m;
+    };
+
+    const load = async (id: string, seed?: string) => {
+      const m = id === game ? manifests.get(id)! : await loadGame(id);
+      seed ??= m.seeds[0].seed;
+      const key = `${id}/${seed}`;
+      if (!runs.has(key)) {
         list.innerHTML = `<li class="traj-loading">loading&hellip;</li>`;
-        cache.set(seed, await (await fetch(`${base}seed-${seed}.json`)).json());
+        runs.set(key, await (await fetch(`${base}${id}/seed-${seed}.json`)).json());
       }
       seedSel.value = seed;
-      render(cache.get(seed)!);
+      render(runs.get(key)!);
     };
 
     const goTo = (step: number) => {
@@ -114,7 +133,8 @@ const { src } = Astro.props;
       el.classList.add("flash");
     };
 
-    seedSel.addEventListener("change", () => load(seedSel.value));
+    gameSel.addEventListener("change", () => load(gameSel.value));
+    seedSel.addEventListener("change", () => load(game, seedSel.value));
     jump.addEventListener("change", () => goTo(+jump.value));
     only.addEventListener("change", () => root.classList.toggle("only-t", only.checked));
     chart.addEventListener("click", (e) => {
@@ -124,17 +144,19 @@ const { src } = Astro.props;
     });
 
     // Other scripts (e.g. links in a post) can ask the viewer to show a step.
+    let games: { id: string; game: string }[] = [];
     root.addEventListener("traj:goto", async (e) => {
-      const { seed, step } = (e as CustomEvent).detail;
-      if (seed && seed !== run?.seed) await load(seed);
+      const { game: g, seed, step } = (e as CustomEvent).detail;
+      const id = g || games[0]?.id || game;
+      if (id !== game || seed !== run?.seed) await load(id, seed);
       requestAnimationFrame(() => goTo(step));
     });
 
     (async () => {
-      const m = await (await fetch(`${base}manifest.json`)).json();
-      seedSel.innerHTML = m.seeds.map((s: Seed, i: number) =>
-        `<option value="${s.seed}">#${i + 1} · seed ${s.seed} · ${s.highscore}/${s.max_score}</option>`).join("");
-      if (!run) await load(m.seeds[0].seed);
+      games = (await (await fetch(`${base}index.json`)).json()).games;
+      gameSel.innerHTML = games.map((g) => `<option value="${g.id}">${esc(g.game)}</option>`).join("");
+      root.classList.toggle("one-game", games.length < 2);
+      if (!run) await load(games[0].id);
       root.dispatchEvent(new Event("traj:ready"));
     })();
   }
@@ -171,6 +193,7 @@ const { src } = Astro.props;
   }
 
   .traj-bar input[type="number"] { width: 5em; }
+  .traj.one-game .traj-game-label { display: none; }
   .traj-check { cursor: pointer; }
 
   .traj-meta {
@@ -272,6 +295,8 @@ const { src } = Astro.props;
     color: var(--rust);
     font-weight: 500;
   }
+
+  .ts-enter { color: var(--ink-dim); font-weight: 400; }
 
   .ts-feedback {
     margin: 0.2rem 0 0;

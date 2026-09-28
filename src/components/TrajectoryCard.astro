@@ -1,0 +1,156 @@
+---
+// A single trajectory moment, rendered at build time from the viewer's data
+// (scripts/build_trajectory_data.py) so quotes always match the runs.
+//
+//   <TrajectoryCard game="zork" seed="202411061" step={1} quote="I know the classic walkthrough" />
+//
+// Props:
+//   game, seed, step  which moment to show
+//   src        viewer data folder; defaults to /blog/<post>/trajectories/
+//   context    also show what the game said just before this step
+//   think      show the reasoning summary (default: when the step has one)
+//   quote      show only the reasoning paragraph(s) containing this text, emphasised
+//   emphasize  more phrases to emphasise
+//   play       show the action and the game's reply (default true)
+//   earlier    an earlier step to show before this one (its action and reply)
+//   then       a later step to show after this one (its action and reply)
+//   paras      only show the first N paragraphs of each game reply
+//   class      extra class on the card
+import fs from "node:fs";
+import path from "node:path";
+
+export interface Props {
+  game: string;
+  seed: string;
+  step: number;
+  src?: string;
+  context?: boolean;
+  think?: boolean;
+  quote?: string;
+  emphasize?: string[];
+  play?: boolean;
+  earlier?: number;
+  then?: number;
+  paras?: number;
+  class?: string;
+}
+
+type Seg = [string, number, number[]];
+type Step = { s: number; sc: number; a: string; f: string; t?: Seg[] };
+
+const {
+  game, seed, step, context = false, quote, emphasize = [], play = true, earlier, then, paras,
+  class: extra,
+} = Astro.props;
+
+const slug = Astro.url.pathname.replace(/\/?$/, "/");
+const src = (Astro.props.src ?? `${slug}trajectories/`).replace(/\/?$/, "/");
+const dir = path.join(process.cwd(), "public", src);
+const read = (f: string) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
+
+const index = read("index.json");
+const gameName = index.games.find((g: { id: string }) => g.id === game)?.game ?? game;
+const manifest = read(`${game}/manifest.json`);
+const runNo = manifest.seeds.findIndex((s: { seed: string }) => s.seed === seed) + 1;
+const run = read(`${game}/seed-${seed}.json`);
+const at = (n: number): Step => {
+  const s = run.steps[n - 1];
+  if (!s || s.s !== n) throw new Error(`TrajectoryCard: ${game} ${seed} has no step ${n}`);
+  return s;
+};
+
+const cur = at(step);
+const prior = earlier ? at(earlier) : null;
+const later = then ? at(then) : null;
+const before = context ? (step === 1 ? run.start : at(step - 1).f) : null;
+const showThink = (Astro.props.think ?? true) && !!cur.t;
+
+const esc = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+const trim = (text: string) => (paras ? text.split(/\n\n+/).slice(0, paras).join("\n\n") : text);
+
+// Reasoning: flatten segments to characters so emphasis and paragraph
+// selection can be applied, then regroup into runs.
+let thinkHtml = "";
+if (showThink) {
+  const chars: { c: string; b: boolean; r: number[]; e: boolean }[] = [];
+  for (const [text, bold, refs] of cur.t!) for (const c of text) chars.push({ c, b: !!bold, r: refs, e: false });
+  const plain = chars.map((x) => x.c).join("");
+
+  for (const phrase of [quote, ...emphasize].filter(Boolean) as string[]) {
+    const at = plain.indexOf(phrase);
+    if (at < 0) throw new Error(`TrajectoryCard: "${phrase}" not in ${game} ${seed} step ${step}`);
+    for (let i = at; i < at + phrase.length; i++) chars[i].e = true;
+  }
+
+  // Paragraph ranges; with `quote`, keep only those containing it.
+  let ranges: [number, number][] = [];
+  const gap = /\n\n+/g;
+  let from = 0;
+  for (let hit; (hit = gap.exec(plain)); from = hit.index + hit[0].length) {
+    if (plain.slice(from, hit.index).trim()) ranges.push([from, hit.index]);
+  }
+  if (plain.slice(from).trim()) ranges.push([from, plain.length]);
+  if (quote) {
+    const q0 = plain.indexOf(quote), q1 = q0 + quote.length;
+    ranges = ranges.filter(([a, b]) => a < q1 && b > q0);
+  }
+
+  const refs: [string, number][] = run.refs;
+  const para = ([a, b]: [number, number]) => {
+    let out = "", i = a;
+    while (i < b) {
+      const { b: bold, r, e } = chars[i];
+      let j = i;
+      while (j < b && chars[j].b === bold && chars[j].e === e && chars[j].r.join() === r.join()) j++;
+      let h = esc(plain.slice(i, j));
+      if (bold || e) h = `<strong>${h}</strong>`;
+      if (r.length) {
+        const tip = r.map((k) => `${refs[k][0]} — first shown at step ${refs[k][1]}`).join("\n");
+        h = `<mark class="future" title="${esc(tip)}">${h}</mark>`;
+      }
+      out += h;
+      i = j;
+    }
+    return `<p>${out}</p>`;
+  };
+  thinkHtml = (quote && ranges[0][0] > 0 ? "<p class=\"tcard-gap\">&hellip;</p>" : "") + ranges.map(para).join("");
+}
+
+const action = (a: string) => (a.trim() ? esc(a) : `<span class="tcard-enter">(enter)</span>`);
+const href = `#trajectory-${game}-${seed}-${step}`;
+---
+<figure class:list={["tcard", extra]}>
+  <figcaption class="tcard-head">
+    <span>{gameName} &middot; run {runNo} &middot; step {step}</span>
+    <a href={href}>open in viewer &rarr;</a>
+  </figcaption>
+  {prior && (
+    <div class="tcard-then">
+      <span class="tcard-label">earlier, at step {prior.s}</span>
+      <div class="tcard-action" set:html={`&gt; ${action(prior.a)}`} />
+      <pre class="tcard-text" set:html={esc(trim(prior.f))} />
+    </div>
+  )}
+  {before && <pre class="tcard-text tcard-before" set:html={esc(trim(before))} />}
+  {showThink && (
+    <div class="tcard-think">
+      <span class="tcard-label">{prior ? `step ${step} · ` : ""}reasoning summary</span>
+      <Fragment set:html={thinkHtml} />
+    </div>
+  )}
+  {play && (
+    <>
+      <div class="tcard-action" set:html={`&gt; ${action(cur.a)}`} />
+      <pre class="tcard-text" set:html={esc(trim(cur.f))} />
+    </>
+  )}
+  {later && (
+    <div class="tcard-then">
+      <span class="tcard-label">later, at step {later.s}</span>
+      <div class="tcard-action" set:html={`&gt; ${action(later.a)}`} />
+      <pre class="tcard-text" set:html={esc(trim(later.f))} />
+    </div>
+  )}
+</figure>

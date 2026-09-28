@@ -37,6 +37,7 @@ const fmt = (d: Date) =>
   <div class="reader">
     <article class="prose reader-post">
       <h1>{post.data.title}</h1>
+      {post.data.deck && <p class="deck">{post.data.deck}</p>}
       <div class="entry-meta">
         {fmt(post.data.date)}
         {post.data.tags.length > 0 && <> &middot; {post.data.tags.join(", ")}</>}
@@ -68,11 +69,12 @@ const fmt = (d: Date) =>
   const topBlock = () => {
     if (!post || getComputedStyle(post).display === "none") return null;
     const edge = Math.max(post.getBoundingClientRect().top, 0);
-    return [...post.children].find((el) => el.getBoundingClientRect().bottom > edge + 1) ?? null;
+    return [...post.children].find((el) => !el.matches(".sidenotes") && el.getBoundingClientRect().bottom > edge + 1) ?? null;
   };
 
   const setView = (v: string) => {
-    const keep = topBlock();
+    const changed = html.getAttribute("data-reader-view") !== v;
+    const keep = changed ? topBlock() : null;
     html.setAttribute("data-reader-view", v);
     keep?.scrollIntoView({ block: "start" });
     buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === v)));
@@ -80,24 +82,87 @@ const fmt = (d: Date) =>
     if (v === "post") url.searchParams.delete("view");
     else url.searchParams.set("view", v);
     history.replaceState(null, "", url);
+    placeSidenotes();
   };
+
+  // Footnotes as margin notes when there's room beside the post (post view
+  // only); otherwise they stay at the bottom.
+  const sidenotes: { ref: HTMLElement; note: HTMLElement }[] = [];
+  const rail = document.createElement("div");
+  rail.className = "sidenotes";
+  post?.querySelectorAll<HTMLAnchorElement>("sup a[data-footnote-ref]").forEach((ref) => {
+    const item = document.getElementById(decodeURIComponent(ref.hash.slice(1)));
+    if (!item) return;
+    const body = item.cloneNode(true) as HTMLElement;
+    body.querySelectorAll("[data-footnote-backref]").forEach((b) => b.remove());
+    const note = document.createElement("aside");
+    note.className = "sidenote";
+    note.innerHTML = `<span class="sidenote-num">${ref.textContent}</span> ${[...body.querySelectorAll("p")].map((p) => p.innerHTML).join(" ")}`;
+    rail.append(note);
+    sidenotes.push({ ref, note });
+    ref.addEventListener("click", (e) => {
+      if (!html.classList.contains("has-sidenotes")) return;
+      e.preventDefault();
+      note.classList.remove("flash");
+      void note.offsetWidth;
+      note.classList.add("flash");
+    });
+  });
+  if (post && sidenotes.length) post.append(rail);
+
+  function placeSidenotes() {
+    if (!post || !sidenotes.length) return;
+    const rem = parseFloat(getComputedStyle(html).fontSize);
+    const room = document.documentElement.clientWidth - post.getBoundingClientRect().right;
+    const fits = (html.getAttribute("data-reader-view") ?? "post") === "post" && room >= 17.5 * rem;
+    html.classList.toggle("has-sidenotes", fits);
+    if (!fits) return;
+    const top = post.getBoundingClientRect().top;
+    let floor = 0;
+    for (const { ref, note } of sidenotes) {
+      const y = Math.max(ref.getBoundingClientRect().top - top - 0.3 * rem, floor);
+      note.style.top = `${y}px`;
+      floor = y + note.offsetHeight + 0.8 * rem;
+    }
+  }
+  placeSidenotes();
+  window.addEventListener("resize", placeSidenotes);
+  if (post) new ResizeObserver(placeSidenotes).observe(post);
+  document.fonts?.ready.then(placeSidenotes);
+
+  // "cite this post" copy button.
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-cite]").forEach((b) => {
+    b.addEventListener("click", async () => {
+      const text = b.closest(".cite")?.querySelector("pre")?.textContent ?? "";
+      try {
+        await navigator.clipboard.writeText(text);
+        b.textContent = "copied";
+      } catch {
+        b.textContent = "select & copy";
+      }
+      setTimeout(() => (b.textContent = "copy"), 1600);
+    });
+  });
 
   if (viewer) {
     buttons.forEach((b) => b.addEventListener("click", () => setView(b.dataset.view!)));
     setView(html.getAttribute("data-reader-view") || "post");
 
-    // Links in the post like [step 1](#trajectory-202411061-1) open that
-    // step in the viewer, switching to split view if only the post is showing.
+    // Links like #trajectory-zork-202411061-1 (game optional) open that step
+    // in the viewer, switching to split view if only the post is showing.
     const goto = (hash: string) => {
-      const m = hash.match(/^#trajectory-(\d+)-(\d+)$/);
+      const m = hash.match(/^#trajectory-(?:([a-z][\w-]*?)-)?(\d+)-(\d+)$/);
       if (!m) return false;
       if (html.getAttribute("data-reader-view") === "post") setView("split");
-      viewer.dispatchEvent(new CustomEvent("traj:goto", { detail: { seed: m[1], step: +m[2] } }));
+      viewer.dispatchEvent(new CustomEvent("traj:goto", { detail: { game: m[1], seed: m[2], step: +m[3] } }));
       return true;
     };
     document.querySelectorAll<HTMLAnchorElement>('.reader-post a[href^="#trajectory-"]').forEach((a) => {
       a.classList.add("traj-link");
       a.addEventListener("click", (e) => { if (goto(a.getAttribute("href")!)) e.preventDefault(); });
+    });
+    document.querySelectorAll<HTMLAnchorElement>("a[data-view-link]").forEach((a) => {
+      a.addEventListener("click", (e) => { e.preventDefault(); setView(a.dataset.viewLink!); });
     });
     if (location.hash) viewer.addEventListener("traj:ready", () => goto(location.hash), { once: true });
     window.addEventListener("hashchange", () => goto(location.hash));

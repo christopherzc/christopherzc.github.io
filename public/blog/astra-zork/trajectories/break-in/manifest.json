@@ -1,0 +1,52 @@
+{
+ "id": "break-in",
+ "game": "Break-In",
+ "model": "Astra",
+ "seeds": [
+  {
+   "seed": "202411061",
+   "steps": 500,
+   "highscore": 22,
+   "max_score": 150,
+   "summaries": 40,
+   "future_summaries": 11,
+   "future_refs": 14
+  },
+  {
+   "seed": "202411062",
+   "steps": 500,
+   "highscore": 31,
+   "max_score": 150,
+   "summaries": 46,
+   "future_summaries": 9,
+   "future_refs": 10
+  },
+  {
+   "seed": "202411063",
+   "steps": 500,
+   "highscore": 33,
+   "max_score": 150,
+   "summaries": 37,
+   "future_summaries": 17,
+   "future_refs": 20
+  },
+  {
+   "seed": "202411064",
+   "steps": 500,
+   "highscore": 45,
+   "max_score": 150,
+   "summaries": 33,
+   "future_summaries": 1,
+   "future_refs": 1
+  },
+  {
+   "seed": "202411065",
+   "steps": 500,
+   "highscore": 24,
+   "max_score": 150,
+   "summaries": 39,
+   "future_summaries": 8,
+   "future_refs": 9
+  }
+ ]
+}

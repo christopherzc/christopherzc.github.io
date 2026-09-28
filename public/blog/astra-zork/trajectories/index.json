@@ -1,0 +1,14 @@
+{
+ "games": [
+  {
+   "id": "zork",
+   "game": "Zork I",
+   "model": "Astra"
+  },
+  {
+   "id": "break-in",
+   "game": "Break-In",
+   "model": "Astra"
+  }
+ ]
+}
