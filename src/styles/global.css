@@ -600,6 +600,35 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
   height: auto;
 }
 
+.prose .footnotes {
+  margin-top: 3rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.prose .footnotes ol {
+  padding-left: 1.2rem;
+}
+
+.prose sup a,
+.prose .data-footnote-backref {
+  text-decoration: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* "Research Highlight" block */
 .highlight {
   margin: 1.4em 0;
