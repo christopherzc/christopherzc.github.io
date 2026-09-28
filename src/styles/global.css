@@ -994,9 +994,9 @@ html[data-reader-view="split"] .reader-post > h1:first-child { margin-top: 0; }
 }
 
 .tcard mark.future {
-  background: rgba(160, 74, 42, 0.14);
+  background: none;
   color: inherit;
-  border-bottom: 1px solid var(--rust);
+  font-weight: 700;
   cursor: help;
 }
 

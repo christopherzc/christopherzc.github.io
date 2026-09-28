@@ -17,8 +17,8 @@ const { src } = Astro.props;
   <div class="traj-meta"></div>
   <svg class="traj-chart" preserveAspectRatio="none" role="img" aria-label="Score over steps; click to jump"></svg>
   <p class="traj-legend">
-    <mark class="future">highlighted</mark> reasoning names something the game
-    had not shown yet &mdash; hover for when it first appears.
+    <mark class="future">bold</mark> reasoning includes things the game had
+    not shown yet &mdash; hover for when they first appear.
   </p>
   <ol class="traj-steps"><li class="traj-loading">loading trajectories&hellip;</li></ol>
 </section>
@@ -232,9 +232,9 @@ const { src } = Astro.props;
   }
 
   .traj mark.future {
-    background: rgba(160, 74, 42, 0.14);
+    background: none;
     color: inherit;
-    border-bottom: 1px solid var(--rust);
+    font-weight: 700;
     cursor: help;
   }
 
