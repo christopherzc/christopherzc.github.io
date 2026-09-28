@@ -695,6 +695,51 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
   color: rgba(244, 236, 216, 0.6);
 }
 
+/* Floating text-size control on blog pages (px so it doesn't scale itself) */
+.text-zoom {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.text-zoom button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--bg-soft);
+  color: var(--ink-soft);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(42, 37, 34, 0.12);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.text-zoom button:hover:not(:disabled) {
+  color: var(--rust);
+  border-color: var(--rust);
+}
+
+.text-zoom button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.text-zoom svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
 /* "Research Highlight" block */
 .highlight {
   margin: 1.4em 0;
