@@ -60,7 +60,6 @@ draft: false         # true hides it from the build
 
 Post styling hooks (usable as raw HTML in `.md` or `.mdx`):
 
-- `<p class="pull">…</p>` — pull quote
 - `<figure><img …/><figcaption>…</figcaption></figure>` — captioned figure
 - footnotes (`[^1]`) show as margin notes on wide screens, at the bottom otherwise
 
