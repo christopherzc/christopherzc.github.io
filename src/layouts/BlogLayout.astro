@@ -1,0 +1,32 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <main class="page">
+    <header class="site-header">
+      <a class="brand" href="/">Christopher Z. Cui</a>
+      <nav>
+        <a href="/blog/" class="active">blog</a>
+        <a href="/official/">official</a>
+        <a href="/adventure/">adventure</a>
+      </nav>
+    </header>
+
+    <slot />
+
+    <footer class="site-footer">
+      <span>czcui@ucsd.edu &nbsp;·&nbsp; UC San Diego</span>
+      <a class="mode-toggle" href="/">back to the threshold &rarr;</a>
+    </footer>
+    <p class="site-attribution">
+      Site constructed with the help of <a href="https://claude.com/claude-code">Claude Code</a>.
+    </p>
+  </main>
+</BaseLayout>

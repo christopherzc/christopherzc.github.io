@@ -527,6 +527,35 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
   line-height: 1.55;
 }
 
+/* Blog post body */
+.prose pre {
+  background: var(--bg-soft);
+  border: 1px solid var(--rule-soft);
+  padding: 0.8em 1em;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.prose :not(pre) > code {
+  background: var(--bg-soft);
+  padding: 0.05em 0.3em;
+  font-size: 0.85em;
+}
+
+.prose blockquote {
+  margin: 1.2em 0;
+  padding: 0.1em 0 0.1em 1.2em;
+  border-left: 2px solid var(--rule);
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* "Research Highlight" block */
 .highlight {
   margin: 1.4em 0;
@@ -550,6 +579,11 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
 
 .highlight p {
   margin: 0.3em 0;
+}
+
+@media (max-width: 58rem) {
+  .title-page .doors { flex-direction: column; align-items: center; gap: 1rem; }
+  .title-page .door { width: 16rem; }
 }
 
 @media (max-width: 30rem) {

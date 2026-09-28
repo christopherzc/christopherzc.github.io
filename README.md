@@ -15,11 +15,12 @@ npm run preview  # serve dist/ locally
 
 ## Structure
 
-- `src/pages/index.astro` — landing title page (two doors)
+- `src/pages/index.astro` — landing title page (three doors)
+- `src/pages/blog/` — blog index and per-post pages
 - `src/pages/official/` — clean academic version
 - `src/pages/adventure/` — text-adventure version (interactive parser on landing room)
-- `src/content/` — shared content collections (publications, talks, teaching)
-- `src/layouts/` — `BaseLayout`, `OfficialLayout`, `AdventureLayout`
+- `src/content/` — shared content collections (publications, talks, teaching, blog)
+- `src/layouts/` — `BaseLayout`, `OfficialLayout`, `AdventureLayout`, `BlogLayout`
 - `src/styles/global.css` — parchment palette + typography
 - `public/files/Resume.pdf` — current CV
 
@@ -37,6 +38,21 @@ paperurl: "https://..."
 highlight: false   # set true to surface on the Official about page
 order: 99          # for highlight ordering
 excerpt: "..."
+---
+```
+
+## Adding a blog post
+
+Drop a markdown file in `src/content/blog/`. The filename becomes the URL
+(`my-post.md` → `/blog/my-post/`). See `example-post.md` for a template.
+
+```yaml
+---
+title: "..."
+date: YYYY-MM-DD
+description: "..."   # shown on the blog index
+tags: ["..."]        # optional
+draft: false         # true hides it from the build
 ---
 ```
 
