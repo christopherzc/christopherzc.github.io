@@ -367,6 +367,31 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
   color: var(--bg);
 }
 
+.title-page .scrawl-pile {
+  margin-top: 2.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-page .scrawl-pile p {
+  max-width: 30rem;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin: 0 0 1.1rem;
+}
+
+.title-page .scrawl-pile .door {
+  border-style: dashed;
+  transform: rotate(-0.6deg);
+}
+
+.title-page .scrawl-pile .door:hover {
+  transform: rotate(0deg) translateY(-2px);
+}
+
 .title-page .colophon {
   margin-top: 3.5rem;
   font-size: 0.78rem;
@@ -579,11 +604,6 @@ html[data-adventure-theme="dark"] .theme-toggle .theme-light { display: inline; 
 
 .highlight p {
   margin: 0.3em 0;
-}
-
-@media (max-width: 58rem) {
-  .title-page .doors { flex-direction: column; align-items: center; gap: 1rem; }
-  .title-page .door { width: 16rem; }
 }
 
 @media (max-width: 30rem) {

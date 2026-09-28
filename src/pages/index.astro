@@ -9,7 +9,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="ornament">· · · · ·</div>
     <h1>Christopher Z. Cui</h1>
     <div class="subtitle">
-      a personal page in three parts &mdash; for the curious, the patient, and the idle.
+      a personal page in two parts &mdash; for the curious and the patient.
     </div>
     <div class="ornament">· · · · ·</div>
 
@@ -21,8 +21,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <p style="max-width: 32rem; margin-top: 2rem; font-family: var(--serif); color: var(--ink-soft); line-height: 1.7;">
       You stand at the threshold of a small research office. The door on the left
       bears a neat brass plate; the door on the right is propped open with what
-      looks suspiciously like a worn copy of <em>Zork I</em>. Between them, a
-      third door is papered over with handwritten notes. All three lead inside.
+      looks suspiciously like a worn copy of <em>Zork I</em>. Both lead inside.
     </p>
 
     <div class="doors">
@@ -30,21 +29,28 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <span class="label">left door &mdash; clean</span>
         <span class="name"><span class="arrow">&rarr;</span> Official</span>
       </a>
-      <a class="door" href="/blog/">
-        <span class="label">middle door &mdash; notes</span>
-        <span class="name"><span class="arrow">&rarr;</span> Blog</span>
-      </a>
       <a class="door" href="/adventure/">
         <span class="label">right door &mdash; verbose</span>
         <span class="name"><span class="arrow">&rarr;</span> Adventure</span>
       </a>
     </div>
 
+    <div class="scrawl-pile">
+      <p>
+        On the floor between the two doors sits a messy pile of scrawls and
+        ink &mdash; loose pages, half-finished thoughts, the occasional coffee
+        ring. Nobody seems to have tidied it in a while.
+      </p>
+      <a class="door" href="/blog/">
+        <span class="label">rummage through the pile</span>
+        <span class="name"><span class="arrow">&rarr;</span> Blog</span>
+      </a>
+    </div>
+
     <p class="colophon">
-      The outer doors lead to the same person and the same research.
+      Both doors lead to the same person and the same research.
       The official side reads like a CV; the adventure side reads like a
-      text adventure. The middle door is where the longer-form writing
-      lives. Pick whichever fits your mood &mdash; you can switch
+      text adventure. Pick whichever fits your mood &mdash; you can switch
       from the footer of any page.
     </p>
 
